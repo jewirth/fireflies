@@ -1,10 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
-//#include <stdlib.h>
-//#include <stdio.h>
-//#include <inttypes.h>
 #include <avr/interrupt.h>
-//#include <string.h>
 
 #define	FADESTEPS	20
 
@@ -29,8 +25,7 @@ ISR(TIMER0_OVF_vect)
 	/* figure out fading fireflies for current step */
 	for (j=0; j<8; j++)
 		for (i=0; seq[j][i]!=0 ;i++)
-			if (step == seq[j][i])
-			{
+			if (step == seq[j][i]) {
 				if (PORTB & (1<<j))
 					fadeout |= (1<<j);
 				else
@@ -39,8 +34,7 @@ ISR(TIMER0_OVF_vect)
 			}
 
 	/* do the fading */
-	for(i=0; i<FADESTEPS; i++)
-	{
+	for(i=0; i<FADESTEPS; i++) {
 		PORTB = (PORTB | fadein) & ~fadeout;
 		_delay_ms(i);
 		PORTB = (PORTB & ~fadein) | fadeout;
@@ -51,8 +45,7 @@ ISR(TIMER0_OVF_vect)
 	step++;
 }
 
-int main (void)
-{
+int main (void) {
 	TIMSK = (1<<TOIE0);
 	TCCR0 = (1<<CS02) | (0<<CS01) | (1<<CS00);
 	sei();
